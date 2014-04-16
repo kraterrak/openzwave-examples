@@ -258,6 +258,7 @@ int main(int argc, char* argv[])
     Options::Get()->AddOptionInt( "PollInterval", 500 );
     Options::Get()->AddOptionBool( "IntervalBetweenPolls", true );
     Options::Get()->AddOptionBool("ValidateValueChanges", true);
+    Options::Get()->AddOptionString( "UserPath", "./meta/", true);
     Options::Get()->Lock();
     
     printf("\n Creating Manager \n");
