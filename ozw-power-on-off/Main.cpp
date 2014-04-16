@@ -275,9 +275,9 @@ int main(int argc, char* argv[])
     for (int i = 0; i < 5; i++ )
     {
       printf("\n Loop %i \n", i );
-      SetValue(false);
-      sleep(5);
       SetValue(true);
+      sleep(5);
+      SetValue(false);
       sleep(5);
     }
 
