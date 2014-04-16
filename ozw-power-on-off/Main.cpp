@@ -256,6 +256,10 @@ int main(int argc, char* argv[])
     Options::Get()->AddOptionInt( "QueueLogLevel", LogLevel_Debug );
     Options::Get()->AddOptionInt( "DumpTrigger", LogLevel_Error );
     Options::Get()->AddOptionInt( "PollInterval", 500 );
+
+    // Comment the following line out if you want console logging
+    Options::Get()->AddOptionBool( "ConsoleOutput", false );
+
     Options::Get()->AddOptionBool( "IntervalBetweenPolls", true );
     Options::Get()->AddOptionBool("ValidateValueChanges", true);
     Options::Get()->AddOptionString( "UserPath", "./meta/", true);
@@ -275,7 +279,7 @@ int main(int argc, char* argv[])
     // loop to switch on/off every 5 seconds
     for (int i = 0; i < 5; i++ )
     {
-      printf("\n Loop %i \n", i );
+      printf("\n Loop %i \n", i+1 );
       SetValue(true);
       sleep(5);
       SetValue(false);
