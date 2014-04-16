@@ -12,4 +12,4 @@ path: $(LD_LIBRARY_PATH)
 
 ozw: Main.cpp
 	$(CC) $(INCLUDES) -c Main.cpp -o ozw-power-on-off.o
-	$(CC) $(LIBS) $(LDFLAGS) ozw-power-on-off.o -o ozw-power-on-off
+	$(CC) $(LIBS) $(LDFLAGS) ozw-power-on-off.o -o ozw-power-on-off.out

@@ -7,3 +7,7 @@
 *.cmx
 *.cmxs
 *.cmxa
+*.out
+/ozw-power-on-off/OZW_Log.txt
+/ozw-power-on-off/ozw-power-on-off.out
+/ozw-power-on-off/zwcfg_0x0161fa08.xml
