@@ -20,7 +20,7 @@
 
 using namespace OpenZWave;
 
-static uint32 g_homeId = 0x0161fa08;
+static uint32 g_homeId;
 static bool   g_initFailed = false;
 
 typedef struct
