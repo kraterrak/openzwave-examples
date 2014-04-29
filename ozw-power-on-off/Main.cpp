@@ -28,7 +28,7 @@ typedef struct
 	uint32			m_homeId;
 	uint8			m_nodeId;
 	bool			m_polled;
-        list<ValueID>	m_values;
+	list<ValueID>	m_values;
 }NodeInfo;
 
 static list<NodeInfo*> g_nodes;
@@ -126,7 +126,7 @@ void OnNotification
 			NodeInfo* nodeInfo = new NodeInfo();
 			nodeInfo->m_homeId = _notification->GetHomeId();
 			nodeInfo->m_nodeId = _notification->GetNodeId();
-			nodeInfo->m_polled = false;		
+			nodeInfo->m_polled = false;
 			g_nodes.push_back( nodeInfo );
 			break;
 		}
@@ -218,19 +218,26 @@ void SetValue(bool value)
     pthread_mutex_lock( &g_criticalSection );
     for( list<NodeInfo*>::iterator it = g_nodes.begin(); it != g_nodes.end(); ++it )
     {
-        NodeInfo* nodeInfo = *it;
+	NodeInfo* nodeInfo = *it;
 	if( nodeInfo->m_nodeId != nodeid ) continue;
-        for( list<ValueID>::iterator it2 = nodeInfo->m_values.begin();
+	for( list<ValueID>::iterator it2 = nodeInfo->m_values.begin();
  it2 != nodeInfo->m_values.end(); ++it2 )
-        {
-            ValueID v = *it2;
-            if( v.GetCommandClassId() == 0x25 )
-            {
-		Manager::Get()->SetValue(v, value);                
-		printf("\n Setting Node 3 to %s \n", value ? "On" : "Off");
-                break;
-            }
-        }
+	{
+	    ValueID v = *it2;
+	    if( v.GetCommandClassId() == 0x25)
+	    {
+		bool* status;
+		printf("\n Setting Node %d to %s ",
+		       nodeInfo->m_nodeId,
+		       value ? "On" : "Off");
+		Manager::Get()->SetValue(v, value);
+		printf("\n Node %d is now %s \n",
+		       nodeInfo->m_nodeId,
+		       Manager::Get()->GetValueAsBool(v, status) ? "ON" : "OFF");
+
+		break;
+	    }
+	}
     }
 
     pthread_mutex_unlock( &g_criticalSection );
@@ -241,7 +248,7 @@ int main(int argc, char* argv[])
     string port = "/dev/ttyUSB0";
     pthread_mutexattr_t mutexattr;
 
-    // Set up mutual exclusion so that this thread has priority
+   // Set up mutual exclusion so that this thread has priority
     pthread_mutexattr_init ( &mutexattr );
     pthread_mutexattr_settype( &mutexattr, PTHREAD_MUTEX_RECURSIVE );
     pthread_mutex_init( &g_criticalSection, &mutexattr );
@@ -264,9 +271,9 @@ int main(int argc, char* argv[])
     Options::Get()->AddOptionBool("ValidateValueChanges", true);
     Options::Get()->AddOptionString( "UserPath", "./meta/", true);
     Options::Get()->Lock();
-    
+
     printf("\n Creating Manager \n");
-    
+
     Manager::Create();
     Manager::Get()->AddWatcher( OnNotification, NULL );
     Manager::Get()->AddDriver( port );
@@ -275,13 +282,14 @@ int main(int argc, char* argv[])
     pthread_cond_wait( &initCond, &initMutex );
 
     printf("\n Starting On/Off Program \n");
-    
+
     // loop to switch on/off every 5 seconds
     for (int i = 0; i < 5; i++ )
     {
-      printf("\n Loop %i \n", i+1 );
+      printf("\n Loop %i \n ====== \n", i+1 );
       SetValue(true);
       sleep(5);
+      // Why is this not working anymore?
       SetValue(false);
       sleep(5);
     }
