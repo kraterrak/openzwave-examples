@@ -25,9 +25,9 @@ static bool   g_initFailed = false;
 
 typedef struct
 {
-	uint32			m_homeId;
-	uint8			m_nodeId;
-	bool			m_polled;
+	uint32		m_homeId;
+	uint8		m_nodeId;
+	bool		m_polled;
 	list<ValueID>	m_values;
 }NodeInfo;
 
@@ -258,7 +258,7 @@ int main(int argc, char* argv[])
 
     printf("\n Creating Options \n");
 
-    Options::Create( "/usr/local/etc/openzwave", "", "" );
+    Options::Create( "/usr/local/etc/openzwave", "./meta/", "" );
     Options::Get()->AddOptionInt( "SaveLogLevel", LogLevel_Detail );
     Options::Get()->AddOptionInt( "QueueLogLevel", LogLevel_Debug );
     Options::Get()->AddOptionInt( "DumpTrigger", LogLevel_Error );
@@ -269,7 +269,6 @@ int main(int argc, char* argv[])
 
     Options::Get()->AddOptionBool( "IntervalBetweenPolls", true );
     Options::Get()->AddOptionBool("ValidateValueChanges", true);
-    Options::Get()->AddOptionString( "UserPath", "./meta/", true);
     Options::Get()->Lock();
 
     printf("\n Creating Manager \n");
