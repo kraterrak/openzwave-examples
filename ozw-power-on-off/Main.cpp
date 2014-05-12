@@ -1,6 +1,6 @@
 // Main.cpp
 // Author: Steven D. Luland
-// The main class for a prototype z-wave system.
+// The main class for ozw-power-on-off
 
 #include <unistd.h>
 #include <stdio.h>
