@@ -94,7 +94,6 @@ ValueID GetValueID
     int index = 0
 )
 {
-    printf( "\n Looking for CommandClassID: %d; Index %d \n", commandClassID, index );
     for( list<ValueID>::iterator v = nodeInfo->m_values.begin();
      v != nodeInfo->m_values.end(); ++v )
     {
@@ -115,12 +114,15 @@ void SetPowerSwitch
     bool value
 )
 {
+    pthread_mutex_lock( &g_criticalSection );
     bool* status;
     printf("\n Setting Switch to %s ",
 	   value ? "On" : "Off");
     Manager::Get()->SetValue(valueID, value);
-    printf("\n Switch is now %s \n",
-	   Manager::Get()->GetValueAsBool(valueID, status) ? "ON" : "OFF");
+    // This print statement keeps segfaulting and I don't know why
+    //printf("\n Switch is now %s \n",
+    //       Manager::Get()->GetValueAsBool(valueID, status) ? "ON" : "OFF");
+    pthread_mutex_unlock( &g_criticalSection );
 }
 
 //-----------------------------------------------------------------------------
@@ -174,7 +176,7 @@ void OnNotification
 		bool* status;
 		ValueID v = GetValueID( nodeInfo, 0x30 );
 		bool val_get = Manager::Get()->GetValueAsBool(v, status);
-		if( *status ){
+		if( *status ) {
 		    printf( "\n Sensor is now: ACTIVE");
 		    SetPowerSwitch( GetValueID( GetNodeInfo( g_powerSwitchNodeID ), 0x25 ), true );
 		} else {
